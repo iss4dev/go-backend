@@ -64,3 +64,11 @@ func (repo *PGRepo) GetBookByID(id int) (models.Book, error) {
 
 	return book, err
 }
+
+func (repo *PGRepo) DeleteBookById(id int) (err error) {
+	repo.mu.Lock()
+	defer repo.mu.Unlock()
+	_, err = repo.pool.Exec(context.Background(),
+		`DELETE FROM books WHERE id=$1`, id)
+	return err
+}
